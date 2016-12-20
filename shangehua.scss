@@ -1,0 +1,462 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+$m-size:1068px;
+$s-size:736px;
+@mixin onm{
+  @media screen and (max-width:1068px){
+    @content;
+  }
+}
+@mixin ons{
+  @media screen and (max-width:736px){
+    @content;
+  }
+}
+
+body.hidden{
+  overflow-y: hidden;
+}
+.header{
+  z-index: 9999999;
+   position:relative;
+    top:0;
+    left:0;
+    width: 100%;
+    background: rgba(0,0,0,0.8);
+    .phone-list{
+       height:48px;
+       display: none;
+        @include ons{
+            display: block;
+        }
+    }
+
+    .header-iner{
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 22px;
+    }
+    .nav-list{
+      position: relative;
+      @include ons{
+        display:none;
+        }
+        padding: 0 10px;
+        margin: 0 -10px;
+        height: 44px;
+        text-align: justify;
+        &::after{
+            width: 100%;
+            content: '';
+            height:0;
+            display: inline-block;
+        }
+      .nav-item{
+        transition: transform .4s ease;
+        display: inline-block;
+
+        a{
+          display: block;
+          height: 44px;
+          color: #fff;
+          padding: 0 10px;
+          transition: opacity .5s ease;
+          &:hover{
+            opacity: 0.5;
+          }
+        }
+        a.guan{
+          display: none;
+          background: url("img/guan.svg") no-repeat center center ;
+          background-size: contain;
+          position: absolute;
+          right: 88px;
+          top: 0;
+        }
+      }
+    }
+  .mask{
+    background: rgba(0,0,0,0.5);
+    display: none;
+    position: fixed;
+    top: 44px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    //z-index: 9998;
+  }
+}
+$nav-map:("logo":20px, "mac":31px,  "iad":30px,"iphone":48px,"watch":44px, "imusic":40px, "support":57px, "search":20px, "bag":18px
+);
+@each $c in map_keys($nav-map){
+    .#{$c}{
+        width: map_get($nav-map,$c);
+        background: url("./img/" + $c + ".svg") no-repeat center center;
+
+    }
+}
+.header.searching{
+   z-index: 999999;
+  .nav-list .menu{
+    transform: scale(0,0);
+  }
+  .search-box{
+    z-index: 456789;
+  }
+  .search-box .search-box-inner{
+    transform: translate3d(0,0,0);
+    opacity: 1;
+  }
+  .search-box .card{
+    opacity: 1;
+  }
+  .search-box .card li{
+    transform: translate3d(0,0,0);
+  }
+
+  .mask{display: block;z-index: 99999;}
+}
+
+
+.header .search-box{
+  z-index: -1;
+  width: 682px;
+  position: absolute;
+  height: 44px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  .search-box-inner{
+    //background: red;
+    opacity: 0;
+    transition: opacity .8s ease,
+                transform .8s ease;
+    width: 100%;
+    height: 44px;
+    .sd{
+      background: url('img/search (2).svg') no-repeat center center;
+      height: 100%;
+      width:10%;
+      //background: red;
+      float: left;
+    }
+    input{
+     background-color: transparent;
+      font-size: 16px;
+      line-height: 1.375;
+      font-weight: 400;
+      letter-spacing: normal;
+      color: #fff;
+      outline: none;
+      border: 0;
+      width: 100%;
+      height: 1.375em;
+      width: 85%;
+      height: 100%;
+      }
+    transform: translate3d(840px,0,0);
+  }
+  .card{
+    transition: opacity .8s ease;
+    background:white;
+    color: #999;
+    opacity: 0;
+    //z-index: -1;
+    position: relative;
+    //background: red;
+    h3{
+      padding: 10px 20px;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    li{
+      padding-left: 50px;
+      margin-bottom: 10px;
+      //background: #ccc;
+      font-size: 14px;
+      transform: translate3d(100%,0,0);
+      &:hover{
+        cursor: pointer;
+        color:#0070c9;
+      }
+    }
+    @for $i from 1 through 5{
+      li:nth-child(#{$i}){
+        transition: transform .8s ease $i/2*0.1s;
+      }
+    }
+  }
+}
+
+
+//轮播
+.carousel{
+  position: relative;
+  min-height: 130px;
+  height: calc(100vh - 60px);//动态计算
+ .gallery-slide-wrapper{
+   width: 100%;
+   height: 100%;
+   position: relative;
+   a{
+     display:none;
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     top: 0;
+     left: 0;
+     transform: translate3d(0,0,0);
+     background-repeat:no-repeat;
+     background-size: contain;
+     background-position: center center;
+     transition: transform 1s ease ;
+     &.active{
+       z-index: 9;
+       display: block;
+       transform: translate3d(0,0,0);
+     }
+   }
+   a.right{
+     z-index: 10;
+     display: block;
+     transform: translate3d(100%,0,0);
+   }
+
+   a.leave{
+     display: block;
+     transform: translate3d(-100%,-100%,0);
+   }
+   a.enter{
+     z-index: 5;
+     display: block;
+     animation:enter 1s ease both;
+   }
+   @keyframes enter {
+     0%{
+       transform: translate3d(0,-100px,0);
+
+     }
+     100%{
+       transform: translate3d(0,0,0);
+
+     }
+   }
+   .iphone-7{
+     background-color: black;
+     background-image:url(img/iphone_large.jpg);
+   }
+   .watch{
+     background-color: #f2f2f2;
+     background-image:url(img/watch_large.jpg)
+   }
+   .air-pods{
+     background-color: #fff;
+     background-image:url("img/airpods_large.jpg")
+   }
+   .event{
+     background-color: black;
+     background-image:url("img/event_large.jpg")
+   }
+
+ }
+  .tab-list{
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    z-index: 990;
+    width:100%;
+    .dot-nav{
+      display: inline-block;
+      &::after{
+        content: '';
+        clear: both;
+        height: 0;
+      }
+      .dot{
+        background: rgba(0, 0, 0, 0.28);
+        cursor: pointer;
+        margin:0 5px;
+        height: 2px;
+        padding: 10px 0;
+        background-clip: content-box;
+        float: left;
+        width: 50px;
+        &.active{
+          background: rgba(0, 0, 0, 0.63);
+          background-clip: content-box;
+        }
+      }
+    }
+
+  }
+  .btn{
+    z-index: 999999;
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    top:50%;
+    margin-top:-30px ;
+    a{
+      opacity: 0;
+      display: block;
+      height: 100%;
+      width: 60px;
+      background: rgba(0, 0, 0, 0.25);
+      color: #ccc;
+      text-align: center;
+      line-height: 60px;
+      text-decoration: none;
+      font-size: 40px;
+      font-family: '黑体';
+      font-weight: bold;
+      border-radius: 50%;
+      transition: opacify 1s ease;
+      &:hover{
+        opacity: 1;
+      }
+    }
+    a.left{float: left;margin-left: 20px;}
+    a.right{float: right;margin-right: 20px;}
+  }
+}
+
+////////////////////////////////////
+.row{
+  overflow: hidden;
+
+}
+.col{
+  height: 200px;
+  float: left;
+}
+
+@for $i from 1 through 12{
+  .d-#{$i}{
+    width: percentage($i/12);
+  }
+}
+@include onm{
+  @for $i from 1 through 12{
+    .m-#{$i}{
+      width: percentage($i/12);
+    }
+  }
+}
+@include ons{
+  @for $i from 1 through 12{
+    .s-#{$i}{
+      width: percentage($i/12);
+    }
+  }
+}
+
+$ads-list:"watchos","music","ios","iphone_upgrade";
+@each $i in $ads-list{
+  .#{$i}{
+    background: url("./img/" + $i + "_large.jpg") no-repeat center center;
+    @include onm{
+      background: url("./img/" + $i + "_medium.jpg") no-repeat center center;
+    }
+    @include ons{
+      background: url("./img/" + $i + "_small.jpg") no-repeat center center;
+    }
+  }
+}
+////////////////////////////////
+//底部
+.footer{
+  width:80%;
+  position:relative;
+  font-size:12px;
+  //background:red;
+  overflow: hidden;
+  top:20px;
+  left:0;
+  right: 0;
+  margin: 0 auto;
+  @include ons{
+    display: none;
+  }
+  h3{cursor: pointer}
+  ul{
+    width: 20%;
+    float: left;
+    li{
+      height: 20px;
+      cursor: pointer;
+      font-family: 'abc', sans-serif;
+    }
+  }
+
+}
+.ss ul{
+  display: none;
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  left: 0;
+  right: 0;
+  li{
+    height:40px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(170, 170, 170, 0.73);
+    line-height: 40px;
+    font-size:14px;
+
+  }
+  @include ons{
+    display: block;
+  }
+}
+@font-face {
+  font-family: 'abc';
+  scr:url(myriad-set-pro_bold.woff)
+}
+@font-face {
+  font-family:'def' ;
+  src:url(myriad-set-pro_extrathin.woff)
+}
+//测试浮动
+//.we{
+//  padding: 5px;
+//  margin-top: 30px;
+//  border: red 1px solid;
+//  //overflow: hidden;
+//  //height: 80px;
+//  .a{
+//  height:20px;width: 50px;background: red;float: left;
+//  }
+//  .b{width: 60px;height: 120px;background: greenyellow;float: right;}//元素被向下作用于清楚浮动之前的右浮动
+//  .c{
+//    width:70px;height: 40px;background: yellow;float: left;
+//    }
+//  .d{background: blue;height: 30px;width: 100px;position: relative;top: -20px; }//元素被向下移动用于清除之前的左浮动。
+//  //.qw{
+//  //  margin: 20px;
+//  //  padding: 20px;
+//  //  width: 100px;
+//  //  height: 100px;
+//  //  background: blue;
+//  //  position: relative;
+//  //}
+//&::after{
+//  content: '';
+//  clear:both;
+//  display: block;
+//}
+//
+//}
+
+
+//justify平均分配
+//.box{text-align:justify;height: 30px;}
+//.box:after{content:'';width:100%;height:0;display:inline-block;}
+//.box .item{display:inline-block;background:black;color:white;height:30px;}
+//.asd{width: 100%;height: 20px;background: red;}
